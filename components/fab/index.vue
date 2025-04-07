@@ -140,8 +140,8 @@ const handleMenuItemClick = (item) => {
 .fab-button {
   pointer-events: auto;
   position: fixed;
-  width: 120rpx;
-  height: 120rpx;
+  width: 100rpx;
+  height: 100rpx;
   display: flex;
   align-items: center;
   justify-content: center;
