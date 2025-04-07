@@ -65,7 +65,6 @@ watchEffect(() => {
     let [x] = props.position;
     // 获取页面宽度
     const windowWidth = uni.getSystemInfoSync().windowWidth;
-    console.log(windowWidth / 2, x);
     if (windowWidth / 2 > x) {
       direction.value = "right";
     } else {

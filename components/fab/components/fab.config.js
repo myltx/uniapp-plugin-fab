@@ -12,12 +12,12 @@ export const circlePositionConfig = {
     },
     1: {
       x: -30,
-      y: 100,
+      y: 120,
       delay: 0,
     },
     2: {
-      x: -30,
-      y: 200,
+      x: -25,
+      y: 220,
       delay: 0.1,
     },
     3: {
@@ -33,13 +33,13 @@ export const circlePositionConfig = {
       delay: 0,
     },
     1: {
-      x: 150,
-      y: 100,
+      x: 160,
+      y: 120,
       delay: 0,
     },
     2: {
-      x: 150,
-      y: 200,
+      x: 160,
+      y: 220,
       delay: 0.1,
     },
     3: {
