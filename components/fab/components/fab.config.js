@@ -4,24 +4,48 @@
  * @Descripttion: describe
  */
 export const circlePositionConfig = {
-  0: {
-    x: 60,
-    y: 50,
-    delay: 0,
+  left: {
+    0: {
+      x: 60,
+      y: 50,
+      delay: 0,
+    },
+    1: {
+      x: -30,
+      y: 100,
+      delay: 0,
+    },
+    2: {
+      x: -30,
+      y: 200,
+      delay: 0.1,
+    },
+    3: {
+      x: 60,
+      y: 280,
+      delay: 0.1,
+    },
   },
-  1: {
-    x: 110,
-    y: 100,
-    delay: 100,
-  },
-  2: {
-    x: 160,
-    y: 150,
-    delay: 200,
-  },
-  3: {
-    x: 210,
-    y: 200,
-    delay: 300,
+  right: {
+    0: {
+      x: 60,
+      y: 50,
+      delay: 0,
+    },
+    1: {
+      x: 150,
+      y: 100,
+      delay: 0,
+    },
+    2: {
+      x: 150,
+      y: 200,
+      delay: 0.1,
+    },
+    3: {
+      x: 60,
+      y: 280,
+      delay: 0.1,
+    },
   },
 };

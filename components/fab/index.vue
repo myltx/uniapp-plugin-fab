@@ -31,7 +31,7 @@
           v-if="props.layout === 'circle'"
           :menuItems="newMenuColumns"
           :isOpen="isMenuOpen"
-          :position="props.position"
+          :position="[x, y]"
           @select="handleMenuItemClick" />
         <Column
           v-if="props.layout === 'column'"
@@ -117,6 +117,7 @@ const handleScale = () => {};
 
 // 处理主按钮点击
 const handleMainButtonClick = () => {
+  console.log(12313);
   isMenuOpen.value = !isMenuOpen.value;
 };
 

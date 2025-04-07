@@ -10,7 +10,7 @@
       :key="index"
       class="menu-item"
       :class="{ 'menu-item-active': isOpen }"
-      :style="getItemStyle(index)"
+      :style="newItemStyle[index]"
       @tap="handleSelect(item)">
       <slot name="menu-item" :item="item">
         <text class="menu-icon">{{ item.icon }}</text>
@@ -20,7 +20,8 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from "vue";
+import { defineProps, defineEmits, ref, watchEffect } from "vue";
+import { circlePositionConfig } from "./fab.config";
 
 const props = defineProps({
   menuItems: {
@@ -31,39 +32,53 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  position: {
+    type: Object,
+    default: () => [10, 100],
+  },
 });
 
 const emit = defineEmits(["select"]);
+const direction = ref("left");
 
 const getItemStyle = (index) => {
-  let x = 0;
-  let y = 0;
-  let delay = 0.05 * index;
-  console.log(index, "index");
-  if (index === 0) {
-    x = 60;
-    y = 50;
-    delay = 0;
-  } else if (index === 1) {
-    x = -30;
-    y = 100;
-    delay = 0.1;
-  } else if (index === 2) {
-    x = -30;
-    y = 200;
-    delay = 0.2;
-  } else if (index === 3) {
-    x = 60;
-    y = 280;
-  }
+  const config = circlePositionConfig[direction.value];
 
-  console.log(x, y, "x, y");
+  const { x, y, delay } = config[index] || config[0];
+
   return {
     "--x": `${x}rpx`,
     "--y": `${y}rpx`,
     transitionDelay: `${delay}s`,
   };
 };
+
+const newItemStyle = ref({
+  0: getItemStyle(0),
+  1: getItemStyle(1),
+  2: getItemStyle(2),
+  3: getItemStyle(3),
+});
+
+watchEffect(() => {
+  if (props.isOpen) {
+    let [x] = props.position;
+    // 获取页面宽度
+    const windowWidth = uni.getSystemInfoSync().windowWidth;
+    console.log(windowWidth / 2, x);
+    if (windowWidth / 2 > x) {
+      direction.value = "right";
+    } else {
+      direction.value = "left";
+    }
+    newItemStyle.value = {
+      0: getItemStyle(0),
+      1: getItemStyle(1),
+      2: getItemStyle(2),
+      3: getItemStyle(3),
+    };
+  }
+});
 
 const handleSelect = (item) => {
   emit("select", item);

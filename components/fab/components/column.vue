@@ -25,14 +25,7 @@
 </template>
 
 <script setup>
-import {
-  defineProps,
-  defineEmits,
-  ref,
-  onMounted,
-  computed,
-  watchEffect,
-} from "vue";
+import { defineProps, defineEmits, ref, onMounted, watchEffect } from "vue";
 
 const props = defineProps({
   menuItems: {
@@ -56,7 +49,6 @@ const props = defineProps({
 
 const direction = ref(props.direction);
 const emit = defineEmits(["select"]);
-const menuRef = ref(null);
 const windowHeight = ref(0);
 const windowWidth = ref(0);
 
@@ -67,7 +59,7 @@ onMounted(() => {
 });
 
 const computeDirection = () => {
-  let [left, top] = props.position;
+  let [x, y] = props.position;
   const itemHeight = 80; // 每个菜单项的高度（包含间距）
   const itemWidth = 200; // 菜单项的宽度
   const menuPadding = 20; // 菜单的内边距
@@ -76,10 +68,10 @@ const computeDirection = () => {
   const safeDistance = 20; // 边界安全距离
 
   // 计算按钮位置相对于屏幕边界的距离
-  const distanceToTop = top;
-  const distanceToBottom = windowHeight.value - top;
-  const distanceToLeft = left;
-  const distanceToRight = windowWidth.value - left;
+  const distanceToTop = y;
+  const distanceToBottom = windowHeight.value - y;
+  const distanceToLeft = x;
+  const distanceToRight = windowWidth.value - x;
 
   // 根据按钮位置自动选择最优展开方向
   if (["up", "down"].includes(direction.value)) {
