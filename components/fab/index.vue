@@ -108,7 +108,7 @@ const handleTouchEnd = () => {
 
   // 根据当前位置决定吸附到哪一边
   setTimeout(() => {
-    // x.value = x.value > threshold ? rightEdge : safeDistancePx;
+    x.value = x.value > threshold ? rightEdge : safeDistancePx;
   }, 100);
 };
 
