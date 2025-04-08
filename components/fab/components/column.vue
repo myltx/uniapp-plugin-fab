@@ -42,8 +42,8 @@ const props = defineProps({
   },
   direction: {
     type: String,
-    default: "up",
-    validator: (value) => ["up", "down", "left", "right"].includes(value),
+    default: "top",
+    validator: (value) => ["top", "bottom", "left", "right"].includes(value),
   },
 });
 
@@ -56,6 +56,10 @@ onMounted(() => {
   const systemInfo = uni.getSystemInfoSync();
   windowHeight.value = systemInfo.windowHeight;
   windowWidth.value = systemInfo.windowWidth;
+});
+
+watchEffect(() => {
+  direction.value = props.direction;
 });
 
 const computeDirection = () => {
@@ -74,14 +78,14 @@ const computeDirection = () => {
   const distanceToRight = windowWidth.value - x;
 
   // 根据按钮位置自动选择最优展开方向
-  if (["up", "down"].includes(direction.value)) {
+  if (["top", "bottom"].includes(direction.value)) {
     if (distanceToTop < menuHeight + safeDistance) {
-      direction.value = "down";
+      direction.value = "bottom";
     } else if (
       distanceToBottom < menuHeight + safeDistance &&
       distanceToTop > distanceToBottom
     ) {
-      direction.value = "up";
+      direction.value = "top";
     }
   } else if (["left", "right"].includes(direction.value)) {
     if (
@@ -119,16 +123,16 @@ const handleSelect = (item) => {
   display: flex;
   justify-content: center;
 
-  &[data-direction="up"],
-  &[data-direction="down"] {
+  &[data-direction="top"],
+  &[data-direction="bottom"] {
     flex-direction: column;
     left: 18%;
     // transform: translate(0 -50%);
   }
-  &[data-direction="up"] {
+  &[data-direction="top"] {
     bottom: 120rpx;
   }
-  &[data-direction="down"] {
+  &[data-direction="bottom"] {
     top: 120rpx;
   }
   &[data-direction="left"],

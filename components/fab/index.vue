@@ -43,7 +43,11 @@
           :position="[x, y]"
           :menuItems="newMenuColumns"
           :isOpen="isMenuOpen"
-          @select="handleMenuItemClick" />
+          :direction="props.direction"
+          @select="handleMenuItemClick">
+          <template #menu-item="item">
+            <slot name="menu-item" :item="item"> </slot> </template
+        ></Column>
       </view>
     </movable-view>
   </movable-area>
@@ -91,6 +95,12 @@ const props = defineProps({
     type: String,
     default: "column",
     validator: (value) => ["circle", "column"].includes(value),
+  },
+  // 列行布局弹出方向：left（左侧）或 right（右侧）
+  direction: {
+    type: String,
+    default: "top",
+    validator: (value) => ["top", "bottom", "left", "right"].includes(value),
   },
   // 菜单项配置
   menuItems: {
@@ -170,7 +180,6 @@ const handleScale = () => {};
 
 // 处理主按钮点击
 const handleMainButtonClick = () => {
-  console.log(12313);
   isMenuOpen.value = !isMenuOpen.value;
 };
 

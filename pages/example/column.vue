@@ -5,21 +5,40 @@
 -->
 <template>
   <view class="content">
-    <image class="logo" src="/static/logo.png"></image>
     <view class="text-area">
-      <text class="title">Fab 悬浮按钮示例</text>
+      <text class="title">Fab Column 悬浮按钮示例</text>
     </view>
-
-    <view style="margin-top: 20rpx; width: 100%">
-      <button type="primary" block>circle 布局</button>
+    <view class="tips">
+      由于 Column 模式下菜单过多可能会导致按扭超出屏幕，所以在组件中设置了最多为
+      6 项,如有需要可以在组件中自行调整
     </view>
-    <view style="margin-top: 20rpx; width: 100%">
-      <button type="primary">column 布局</button>
-    </view>
-
-    <fab :menuList="menuList" :layout="'circle'" :position="[0, 0]">
-      <template #menu-item="{ item }"> 12313 </template>
-    </fab>
+    <view class="uni-title">是否可以拖动</view>
+    <switch @change="switchChange" :checked="draggable" />
+    <view class="uni-title">是否自动吸附</view>
+    <switch @change="switch2Change" :checked="autosorption" />
+    <view class="uni-title">弹出方向</view>
+    <radio-group @change="radioChange" class="radio-group">
+      <label
+        class="uni-list-cell uni-list-cell-pd"
+        v-for="(item, index) in items"
+        :key="item.value">
+        <view class="radio">
+          <radio :value="item.value" :checked="index === current" />
+        </view>
+        <view>{{ item.name }}</view>
+      </label>
+    </radio-group>
+    <view class="uni-title">是否使用插槽</view>
+    <switch @change="switch3Change" :checked="useSlot" />
+    <Fab
+      :menuList="menuList"
+      :layout="'column'"
+      :draggable="draggable"
+      :autosorption="autosorption"
+      :direction="items[current].value"
+      :position="[350, 999]">
+      <template #menu-item="item" v-if="useSlot"> 123 </template>
+    </Fab>
   </view>
 </template>
 
@@ -32,6 +51,10 @@ export default {
   },
   data() {
     return {
+      autosorption: true,
+      draggable: true,
+      useSlot: false,
+      current: 0,
       menuList: [
         {
           icon: "/static/logo.png",
@@ -49,9 +72,45 @@ export default {
           type: "user",
         },
       ],
+      items: [
+        {
+          value: "top",
+          name: "上",
+          checked: "true",
+        },
+        {
+          value: "bottom",
+          name: "下",
+        },
+        {
+          value: "left",
+          name: "左",
+        },
+        {
+          value: "right",
+          name: "右",
+        },
+      ],
     };
   },
   methods: {
+    switchChange(e) {
+      this.draggable = e.detail.value;
+    },
+    switch2Change(e) {
+      this.autosorption = e.detail.value;
+    },
+    switch3Change(e) {
+      this.useSlot = e.detail.value;
+    },
+    radioChange: function (evt) {
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].value === evt.detail.value) {
+          this.current = i;
+          break;
+        }
+      }
+    },
     handleFabClick(item) {
       uni.showToast({
         title: `点击了${item.text}按钮`,
@@ -72,20 +131,26 @@ export default {
   // background: #f7f7f7;
   // height: 80vh;
 }
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin: 200rpx auto 50rpx auto;
+.tips {
+  font-size: 24rpx;
+  color: #8f8f94;
+  margin: 10px 0;
 }
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
 .title {
   font-size: 36rpx;
-  color: #8f8f94;
+  //   color: #8f8f94;
+  font-weight: bold;
+}
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.uni-list-cell {
+  display: flex;
+  margin-right: 10rpx;
+}
+.radio {
+  margin-right: 10rpx;
 }
 </style>
