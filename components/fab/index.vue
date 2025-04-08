@@ -9,6 +9,7 @@
       class="fab-button"
       :x="x"
       :y="y"
+      :disabled="!props.draggable"
       direction="all"
       :out-of-bounds="false"
       :damping="20"
@@ -32,7 +33,11 @@
           :menuItems="newMenuColumns"
           :isOpen="isMenuOpen"
           :position="[x, y]"
-          @select="handleMenuItemClick" />
+          @select="handleMenuItemClick">
+          <template #menu-item="item">
+            <slot name="menu-item" :item="item"> </slot>
+          </template>
+        </Circle>
         <Column
           v-if="props.layout === 'column'"
           :position="[x, y]"
@@ -45,16 +50,26 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from "vue";
+import { ref, defineProps, computed, watchEffect } from "vue";
 import Circle from "./components/circle.vue";
 import Column from "./components/column.vue";
 
 // 组件属性定义
 const props = defineProps({
   // 初始位置
-  initialPosition: {
+  position: {
     type: Array,
     default: () => [10, 100],
+  },
+  // 按扭是否可以拖动
+  draggable: {
+    type: Boolean,
+    default: true,
+  },
+  // 是否自动吸附
+  autosorption: {
+    type: Boolean,
+    default: true,
   },
   // 磁吸安全距离（单位：rpx）
   safeDistance: {
@@ -92,8 +107,28 @@ const props = defineProps({
 });
 
 // 按钮位置状态
-const x = ref(props.initialPosition[0]);
-const y = ref(props.initialPosition[1]);
+const x = ref(props.position[0]);
+const y = ref(props.position[1]);
+
+// 这里监听组件传入的 position  如果y值大于屏幕高度减去底部安全距离，则将y值设置为屏幕高度减去底部安全距离
+watchEffect(() => {
+  if (
+    props.position[1] >
+    uni.getSystemInfoSync().windowHeight - props.bottomSafeDistance
+  ) {
+    y.value = uni.getSystemInfoSync().windowHeight - props.bottomSafeDistance;
+  } else {
+    y.value = props.position[1];
+  }
+  if (
+    props.position[0] >
+    uni.getSystemInfoSync().windowWidth - props.safeDistance
+  ) {
+    x.value = uni.getSystemInfoSync().windowWidth - props.safeDistance;
+  } else {
+    x.value = props.position[0];
+  }
+});
 
 // 菜单状态
 const isMenuOpen = ref(false);
@@ -113,12 +148,15 @@ const handleChange = (e) => {
 const handleTouchEnd = () => {
   const { windowWidth, windowHeight } = uni.getSystemInfoSync();
   const threshold = windowWidth * 0.5; // 屏幕中点作为判断阈值
-  const safeDistancePx = props.safeDistance * (windowWidth / 750); // 将rpx转换为px
-  const rightEdge = windowWidth - safeDistancePx;
+  const rightEdge = windowWidth - props.safeDistance * 4;
 
   // 根据当前位置决定吸附到哪一边
+
   setTimeout(() => {
-    x.value = x.value > threshold ? rightEdge : safeDistancePx;
+    if (props.autosorption) {
+      x.value = x.value > threshold ? rightEdge : props.safeDistance;
+    }
+
     if (y.value < props.topSafeDistance) {
       y.value = props.topSafeDistance;
     } else if (y.value > windowHeight - props.bottomSafeDistance) {

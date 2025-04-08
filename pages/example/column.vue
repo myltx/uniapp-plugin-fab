@@ -17,7 +17,9 @@
       <button type="primary">column 布局</button>
     </view>
 
-    <fab :menuList="menuList" :layout="'circle'" :position="[0, 0]"></fab>
+    <fab :menuList="menuList" :layout="'circle'" :position="[0, 0]">
+      <template #menu-item="{ item }"> 12313 </template>
+    </fab>
   </view>
 </template>
 

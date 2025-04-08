@@ -11,13 +11,21 @@
     </view>
 
     <view style="margin-top: 20rpx; width: 100%">
-      <button type="primary" block>circle 布局</button>
+      <button type="primary" @click="goPath('/pages/example/circle')">
+        circle 布局
+      </button>
     </view>
     <view style="margin-top: 20rpx; width: 100%">
-      <button type="primary">column 布局</button>
+      <button type="primary" @click="goPath('/pages/example/column')">
+        column 布局
+      </button>
     </view>
 
-    <fab :menuList="menuList" :layout="'circle'" :position="[0, 0]"></fab>
+    <fab
+      :menuList="menuList"
+      :layout="'circle'"
+      :autosorption="autosorption"
+      :position="[0, 0]"></fab>
   </view>
 </template>
 
@@ -30,6 +38,7 @@ export default {
   },
   data() {
     return {
+      autosorption: false,
       menuList: [
         {
           icon: "/static/logo.png",
@@ -54,6 +63,11 @@ export default {
       uni.showToast({
         title: `点击了${item.text}按钮`,
         icon: "none",
+      });
+    },
+    goPath(url) {
+      uni.navigateTo({
+        url,
       });
     },
   },
