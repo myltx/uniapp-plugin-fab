@@ -36,6 +36,7 @@
       :draggable="draggable"
       :autosorption="autosorption"
       :direction="items[current].value"
+      @select="select"
       :position="[350, 999]">
       <template #menu-item="item" v-if="useSlot"> 123 </template>
     </Fab>
@@ -94,6 +95,9 @@ export default {
     };
   },
   methods: {
+    select(data) {
+      console.log(data, "dd");
+    },
     switchChange(e) {
       this.draggable = e.detail.value;
     },

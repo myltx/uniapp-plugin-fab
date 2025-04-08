@@ -116,6 +116,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["close", "open", "select"]);
+
 // 按钮位置状态
 const x = ref(props.position[0]);
 const y = ref(props.position[1]);
@@ -181,13 +183,20 @@ const handleScale = () => {};
 // 处理主按钮点击
 const handleMainButtonClick = () => {
   isMenuOpen.value = !isMenuOpen.value;
+  if (!isMenuOpen.value) {
+    emit("close");
+  } else {
+    emit("open");
+  }
 };
 
 // 处理菜单项点击
 const handleMenuItemClick = (item) => {
   console.log("Menu item clicked:", item.action);
+  emit("select", item); // 触发selec
   // 这里可以根据action执行相应的操作
   isMenuOpen.value = false;
+  emit("close");
 };
 </script>
 
