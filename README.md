@@ -1,4 +1,4 @@
-# uniapp-plugin-fab
+# myl-uniapp-fab
 
 一个功能强大的 uniapp 悬浮按钮组件，支持拖拽、自动吸附、多种布局模式等特性。
 
@@ -94,6 +94,10 @@ export default {
 3. 可以通过 safeDistance、bottomSafeDistance 和 topSafeDistance 属性调整按钮的安全区域
 
 ## 示例
+
+![](./1.png)
+
+![](./2.png)
 
 查看 `pages/example` 目录下的示例文件，了解更多使用方法：
 

@@ -3,25 +3,25 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "Fab"
+        "navigationBarTitleText": "myl-uniapp-fab"
       }
     },
     {
       "path": "pages/example/circle",
       "style": {
-        "navigationBarTitleText": "Circle"
+        "navigationBarTitleText": "myl-uniapp-fab-Circle"
       }
     },
     {
       "path": "pages/example/column",
       "style": {
-        "navigationBarTitleText": "Column"
+        "navigationBarTitleText": "myl-uniapp-fab-Column"
       }
     }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Fab",
+    "navigationBarTitleText": "myl-uniapp-fab",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },

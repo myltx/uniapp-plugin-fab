@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Fab from "@/components/fab/index.vue";
+import Fab from "@/components/myl-uniapp-fab/index.vue";
 
 export default {
   components: {
