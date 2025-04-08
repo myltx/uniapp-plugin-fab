@@ -23,7 +23,8 @@
       :layout="'circle'"
       :draggable="draggable"
       :autosorption="autosorption"
-      :position="[350, 999]">
+      :position="[350, 999]"
+      @select="select">
       <template #menu-item="item" v-if="useSlot"> 123 </template>
     </Fab>
   </view>
@@ -61,6 +62,9 @@ export default {
     };
   },
   methods: {
+    select(data) {
+      console.log(data, "dd");
+    },
     switchChange(e) {
       console.log("switch 发生 change 事件，携带值为", e.detail.value);
       this.draggable = e.detail.value;
