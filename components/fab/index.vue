@@ -61,6 +61,16 @@ const props = defineProps({
     type: Number,
     default: 20,
   },
+  // 底部安全距离（单位：rpx）
+  bottomSafeDistance: {
+    type: Number,
+    default: 120,
+  },
+  // 顶部安全距离（单位：rpx）
+  topSafeDistance: {
+    type: Number,
+    default: 120,
+  },
   // 布局模式：circle（环形）或 column（列形）
   layout: {
     type: String,
@@ -101,7 +111,7 @@ const handleChange = (e) => {
 
 // 处理触摸结束事件，实现自动吸附
 const handleTouchEnd = () => {
-  const { windowWidth } = uni.getSystemInfoSync();
+  const { windowWidth, windowHeight } = uni.getSystemInfoSync();
   const threshold = windowWidth * 0.5; // 屏幕中点作为判断阈值
   const safeDistancePx = props.safeDistance * (windowWidth / 750); // 将rpx转换为px
   const rightEdge = windowWidth - safeDistancePx;
@@ -109,6 +119,11 @@ const handleTouchEnd = () => {
   // 根据当前位置决定吸附到哪一边
   setTimeout(() => {
     x.value = x.value > threshold ? rightEdge : safeDistancePx;
+    if (y.value < props.topSafeDistance) {
+      y.value = props.topSafeDistance;
+    } else if (y.value > windowHeight - props.bottomSafeDistance) {
+      y.value = windowHeight - props.bottomSafeDistance;
+    }
   }, 100);
 };
 

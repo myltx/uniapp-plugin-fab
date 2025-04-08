@@ -95,11 +95,10 @@ const handleSelect = (item) => {
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s ease;
-  pointer-events: none;
 
   &.circle-menu-active {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: none;
   }
 }
 

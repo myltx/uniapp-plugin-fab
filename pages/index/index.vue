@@ -10,6 +10,13 @@
       <text class="title">Fab 悬浮按钮示例</text>
     </view>
 
+    <view style="margin-top: 20rpx; width: 100%">
+      <button type="primary" block>circle 布局</button>
+    </view>
+    <view style="margin-top: 20rpx; width: 100%">
+      <button type="primary">column 布局</button>
+    </view>
+
     <fab :menuList="menuList" :layout="'circle'" :position="[0, 0]"></fab>
   </view>
 </template>
@@ -60,8 +67,8 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #f7f7f7;
-  height: 100vh;
+  // background: #f7f7f7;
+  // height: 80vh;
 }
 
 .logo {
