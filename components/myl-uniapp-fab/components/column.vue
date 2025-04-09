@@ -37,7 +37,7 @@ const props = defineProps({
     default: false,
   },
   position: {
-    type: Object,
+    type: Array,
     default: () => [10, 100],
   },
   direction: {
