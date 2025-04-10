@@ -16,7 +16,7 @@
       :class="{ 'menu-item-active': isOpen }"
       :style="{ transitionDelay: `${index * 0.05}s` }"
       @tap="handleSelect(item)">
-      <slot name="menu-item" :item="item">
+      <slot name="menu-item" :data="item" :index="index">
         <text class="menu-icon">{{ item.icon }}</text>
         <text class="menu-text" v-if="item.text">{{ item.text }}</text>
       </slot>

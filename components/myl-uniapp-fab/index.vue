@@ -33,9 +33,10 @@
           :menuItems="newMenuColumns"
           :isOpen="isMenuOpen"
           :position="[x, y]"
-          @select="handleMenuItemClick">
-          <template #menu-item="item">
-            <slot name="menu-item" :item="item"> </slot>
+          @select="handleMenuItemClick"
+          @close="handleMainButtonClick">
+          <template #menu-item="{ data, index }">
+            <slot name="menu-item" :data="data" :index="index"></slot>
           </template>
         </Circle>
         <Column
@@ -45,9 +46,10 @@
           :isOpen="isMenuOpen"
           :direction="props.direction"
           @select="handleMenuItemClick">
-          <template #menu-item="item">
-            <slot name="menu-item" :item="item"> </slot> </template
-        ></Column>
+          <template #menu-item="{ data, index }">
+            <slot name="menu-item" :data="data" :index="index"></slot>
+          </template>
+        </Column>
       </view>
     </movable-view>
   </movable-area>

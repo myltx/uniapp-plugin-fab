@@ -12,7 +12,7 @@
       :class="{ 'menu-item-active': isOpen }"
       :style="newItemStyle[index]"
       @tap="handleSelect(item)">
-      <slot name="menu-item" :item="item">
+      <slot name="menu-item" :data="item" :index="index">
         <text class="menu-icon">{{ item.icon }}</text>
       </slot>
     </view>
