@@ -104,6 +104,10 @@ export default {
 - `circle.vue`: 环形布局示例
 - `column.vue`: 列式布局示例
 
+## 问题
+
+- 当前在微信小程序中插槽显示还有问题需要解决
+
 ## License
 
 MIT

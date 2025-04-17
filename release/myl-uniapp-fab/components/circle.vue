@@ -4,15 +4,18 @@
  * @Descripttion: describe
 -->
 <template>
-  <view class="circle-menu" :class="{ 'circle-menu-active': isOpen }">
+  <view
+    class="circle-menu"
+    :class="{ 'circle-menu-active': isOpen }"
+    @click="closeFab">
     <view
       v-for="(item, index) in menuItems"
       :key="index"
       class="menu-item"
       :class="{ 'menu-item-active': isOpen }"
       :style="newItemStyle[index]"
-      @tap="handleSelect(item)">
-      <slot name="menu-item" :item="item">
+      @click.stop="handleSelect(item)">
+      <slot name="menu-item" :data="item" :index="index">
         <text class="menu-icon">{{ item.icon }}</text>
       </slot>
     </view>
@@ -30,17 +33,18 @@ const props = defineProps({
   },
   isOpen: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   position: {
-    type: Object,
+    type: Array,
     default: () => [10, 100],
   },
 });
-
-const emit = defineEmits(["select"]);
+const emit = defineEmits(["select", "close"]);
 const direction = ref("left");
-
+const closeFab = () => {
+  emit("close");
+};
 const getItemStyle = (index) => {
   const config = circlePositionConfig[direction.value];
 
@@ -62,9 +66,9 @@ const newItemStyle = ref({
 
 watchEffect(() => {
   if (props.isOpen) {
-    let [x] = props.position;
+    const [x] = props.position;
     // 获取页面宽度
-    const windowWidth = uni.getSystemInfoSync().windowWidth;
+    const windowWidth = uni.getWindowInfo().windowWidth;
     if (windowWidth / 2 > x) {
       direction.value = "right";
     } else {
@@ -80,6 +84,7 @@ watchEffect(() => {
 });
 
 const handleSelect = (item) => {
+  console.log(item, "item");
   emit("select", item);
 };
 </script>
@@ -87,18 +92,18 @@ const handleSelect = (item) => {
 <style lang="scss" scoped>
 .circle-menu {
   position: absolute;
-  left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
-  width: 200rpx;
-  height: 400rpx;
-  opacity: 0;
+  left: 50%;
+  width: 100px;
+  height: 200px;
   pointer-events: none;
+  opacity: 0;
   transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
 
   &.circle-menu-active {
+    pointer-events: auto;
     opacity: 1;
-    pointer-events: none;
   }
 }
 
@@ -109,23 +114,23 @@ const handleSelect = (item) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70rpx;
-  height: 70rpx;
+  width: 35px;
+  height: 35px;
   background-color: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
-  transform-origin: center center;
-  transform: scale(0.5) translate(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.5) translate(0);
+  transform-origin: center center;
 
   &.menu-item-active {
-    transform: scale(1) translate(var(--x, 0), var(--y, 0));
     opacity: 1;
+    transform: scale(1) translate(var(--x, 0), var(--y, 0));
   }
 }
 
 .menu-icon {
-  font-size: 36rpx;
+  font-size: 18px;
 }
 </style>
