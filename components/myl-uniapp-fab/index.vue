@@ -4,7 +4,11 @@
  * @Descripttion: 可拖拽的悬浮按钮组件
 -->
 <template>
-  <movable-area class="fab-container">
+  <movable-area
+    class="fab-container"
+    :style="{
+      'z-index': props.zIndex,
+    }">
     <movable-view
       class="fab-button"
       :x="x"
@@ -36,7 +40,7 @@
           @select="handleMenuItemClick"
           @close="handleMainButtonClick">
           <template #menu-item="{ data, index }">
-            <slot name="menu-item" :data="data" :index="index"></slot>
+            <slot name="menu-item" :data="data" :index="index"> </slot>
           </template>
         </Circle>
         <Column
@@ -65,7 +69,7 @@ const props = defineProps({
   // 初始位置
   position: {
     type: Array,
-    default: () => [10, 100],
+    default: () => [999, 999],
   },
   // 按扭是否可以拖动
   draggable: {
@@ -77,17 +81,17 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  // 磁吸安全距离（单位：rpx）
+  // 磁吸安全距离
   safeDistance: {
     type: Number,
     default: 20,
   },
-  // 底部安全距离（单位：rpx）
+  // 底部安全距离
   bottomSafeDistance: {
     type: Number,
     default: 120,
   },
-  // 顶部安全距离（单位：rpx）
+  // 顶部安全距离
   topSafeDistance: {
     type: Number,
     default: 120,
@@ -116,36 +120,24 @@ const props = defineProps({
       { icon: "💾", action: "save" },
     ],
   },
+  // 层级
+  zIndex: {
+    type: Number,
+    default: 9999,
+  },
 });
 
 const emit = defineEmits(["close", "open", "select"]);
 
 // 按钮位置状态
 const x = ref(props.position[0]);
+const oldX = ref(props.position[0]);
 const y = ref(props.position[1]);
-
-// 这里监听组件传入的 position  如果y值大于屏幕高度减去底部安全距离，则将y值设置为屏幕高度减去底部安全距离
-watchEffect(() => {
-  if (
-    props.position[1] >
-    uni.getSystemInfoSync().windowHeight - props.bottomSafeDistance
-  ) {
-    y.value = uni.getSystemInfoSync().windowHeight - props.bottomSafeDistance;
-  } else {
-    y.value = props.position[1];
-  }
-  if (
-    props.position[0] >
-    uni.getSystemInfoSync().windowWidth - props.safeDistance
-  ) {
-    x.value = uni.getSystemInfoSync().windowWidth - props.safeDistance;
-  } else {
-    x.value = props.position[0];
-  }
-});
+const oldY = ref(props.position[1]);
 
 // 菜单状态
 const isMenuOpen = ref(false);
+const isFirst = ref(true);
 
 const newMenuColumns = computed(() => {
   return props.menuItems.slice(0, props.layout === "column" ? 6 : 4);
@@ -154,30 +146,39 @@ const newMenuColumns = computed(() => {
 // 处理拖动事件
 const handleChange = (e) => {
   const { x: newX, y: newY } = e.detail;
-  x.value = newX;
-  y.value = newY;
+  oldX.value = newX;
+  oldY.value = newY;
 };
 
 // 处理触摸结束事件，实现自动吸附
 const handleTouchEnd = () => {
-  const { windowWidth, windowHeight } = uni.getSystemInfoSync();
+  const { windowWidth, windowHeight } = uni.getWindowInfo();
   const threshold = windowWidth * 0.5; // 屏幕中点作为判断阈值
   const rightEdge = windowWidth - props.safeDistance * 4;
-
   // 根据当前位置决定吸附到哪一边
 
+  x.value = oldX.value;
+  y.value = oldY.value;
   setTimeout(() => {
     if (props.autosorption) {
-      x.value = x.value > threshold ? rightEdge : props.safeDistance;
+      x.value = oldX.value > threshold ? rightEdge : props.safeDistance;
     }
 
-    if (y.value < props.topSafeDistance) {
+    if (oldY.value < props.topSafeDistance) {
       y.value = props.topSafeDistance;
-    } else if (y.value > windowHeight - props.bottomSafeDistance) {
+    } else if (oldY.value > windowHeight - props.bottomSafeDistance) {
       y.value = windowHeight - props.bottomSafeDistance;
     }
   }, 100);
 };
+
+// 这里监听组件传入的 position  如果y值大于屏幕高度减去底部安全距离，则将y值设置为屏幕高度减去底部安全距离
+watchEffect(() => {
+  if (isFirst.value) {
+    isFirst.value = false;
+    handleTouchEnd();
+  }
+});
 
 // 处理缩放事件（目前禁用）
 const handleScale = () => {};
@@ -211,56 +212,56 @@ const handleMenuItemClick = (item) => {
 }
 
 .fab-button {
-  pointer-events: auto;
   position: fixed;
-  width: 100rpx;
-  height: 100rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  height: 50px;
+  pointer-events: auto;
 }
 
 .fab-main-button {
-  width: 100rpx;
-  height: 100rpx;
-  background-color: #007aff;
-  border-radius: 50%;
+  position: absolute;
+  top: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: #007aff;
+  border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
 
 .fab-main-button-active {
-  transform: rotate(45deg);
   background-color: #ff3b30;
+  transform: rotate(45deg);
 }
 
 .fab-icon {
-  color: #fff;
-  font-size: 40rpx;
+  font-size: 20px;
   font-weight: bold;
+  color: #fff;
 }
 
 .fab-menu {
   position: absolute;
-  opacity: 0;
   pointer-events: none;
-  // width: 300rpx;
-  // height: 300rpx;
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
 .fab-menu-item {
   position: absolute;
-  transform: scale(0);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0);
   transform-origin: center center;
 }
 
 .fab-menu-active {
-  opacity: 1;
   pointer-events: auto;
+  opacity: 1;
 }
 </style>

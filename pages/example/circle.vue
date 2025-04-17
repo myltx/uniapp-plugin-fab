@@ -25,7 +25,7 @@
       :autosorption="autosorption"
       :position="[350, 999]"
       @select="select">
-      <template #menu-item="item" v-if="useSlot"> 123 </template>
+      <template #menu-item="item" v-if="useSlot"> circle </template>
     </Fab>
   </view>
 </template>
@@ -52,6 +52,11 @@ export default {
           icon: "/static/logo.png",
           text: "相册",
           type: "album",
+        },
+        {
+          icon: "/static/logo.png",
+          text: "用户",
+          type: "user",
         },
         {
           icon: "/static/logo.png",

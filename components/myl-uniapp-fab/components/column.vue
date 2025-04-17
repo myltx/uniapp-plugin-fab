@@ -25,8 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted, watchEffect } from "vue";
-
+import { defineProps, defineEmits, ref, watchEffect, onMounted } from "vue";
 const props = defineProps({
   menuItems: {
     type: Array,
@@ -51,9 +50,10 @@ const direction = ref(props.direction);
 const emit = defineEmits(["select"]);
 const windowHeight = ref(0);
 const windowWidth = ref(0);
+console.log(props.menuItems, "menuItems");
 
 onMounted(() => {
-  const systemInfo = uni.getSystemInfoSync();
+  const systemInfo = uni.getWindowInfo();
   windowHeight.value = systemInfo.windowHeight;
   windowWidth.value = systemInfo.windowWidth;
 });
@@ -63,7 +63,7 @@ watchEffect(() => {
 });
 
 const computeDirection = () => {
-  let [x, y] = props.position;
+  const [x, y] = props.position;
   const itemHeight = 80; // 每个菜单项的高度（包含间距）
   const itemWidth = 200; // 菜单项的宽度
   const menuPadding = 20; // 菜单的内边距
@@ -114,71 +114,70 @@ const handleSelect = (item) => {
 <style lang="scss" scoped>
 .column-menu {
   position: fixed;
-  gap: 10rpx;
-  // padding: 20rpx;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 999;
+  // z-index: 999;
   display: flex;
+  gap: 5px;
   justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s ease;
 
   &[data-direction="top"],
   &[data-direction="bottom"] {
-    flex-direction: column;
     left: 18%;
+    flex-direction: column;
     // transform: translate(0 -50%);
   }
   &[data-direction="top"] {
-    bottom: 120rpx;
+    bottom: 60px;
   }
   &[data-direction="bottom"] {
-    top: 120rpx;
+    top: 60px;
   }
   &[data-direction="left"],
   &[data-direction="right"] {
     flex-direction: row;
-    transform: translate(0 -50%);
+    transform: translate(0, -50%);
   }
   &[data-direction="left"] {
-    right: 120rpx;
     top: 50%;
+    right: 60px;
   }
   &[data-direction="right"] {
-    left: 120rpx;
     top: 50%;
+    left: 60px;
   }
 
   &.column-menu-active {
-    opacity: 1;
     pointer-events: auto;
+    opacity: 1;
   }
 }
 
 .menu-item {
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 20rpx;
-  padding: 20rpx;
+  padding: 10px;
   background-color: #ffffff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  transform: scale(0.5);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.5);
 
   &.menu-item-active {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
   }
 }
 
 .menu-icon {
-  font-size: 40rpx;
+  font-size: 20px;
 }
 
 .menu-text {
-  font-size: 28rpx;
+  font-size: 14px;
   color: #333;
 }
 </style>

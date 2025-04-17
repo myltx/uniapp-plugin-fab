@@ -20,22 +20,12 @@
         column 布局
       </button>
     </view>
-
-    <fab
-      :menuList="menuList"
-      :layout="'circle'"
-      :autosorption="autosorption"
-      :position="[0, 0]"></fab>
   </view>
 </template>
 
 <script>
-import Fab from "@/components/myl-uniapp-fab/index.vue";
-
 export default {
-  components: {
-    Fab,
-  },
+  components: {},
   data() {
     return {
       autosorption: false,

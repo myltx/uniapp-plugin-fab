@@ -38,7 +38,7 @@
       :direction="items[current].value"
       @select="select"
       :position="[350, 999]">
-      <template #menu-item="item" v-if="useSlot"> 123 </template>
+      <template #menu-item="item" v-if="useSlot"> column </template>
     </Fab>
   </view>
 </template>
